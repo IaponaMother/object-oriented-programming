@@ -41,7 +41,7 @@ Best_of_Tokio_Hotel = Albums('Durch Den Monsun', 'Der Letzte Tag', 'Madchen Aus 
 'Spring Nicht', 'Automatisch', 'Ich Brech Aus', 'Rette Mich', '1000 Meere', 'Коmm', 'Sonnensystem')
 
 new_composition1 = Musical_Composition("Schrei", "Tokio Hotel", "поп-рок", True, 8, datetime.date(2009, 10, 9),
-                                       'TokioHotel_Schrei', Best_of_Tokio_Hotel)
+                                       'TokioHotel_Schrei.mp3', Best_of_Tokio_Hotel)
 
 new_composition2 = Musical_Composition("Clair de Lune", "Debussy", "классическая музыка", False, 9,
                                        datetime.date(1890, 1, 1), None, None)
