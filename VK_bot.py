@@ -78,17 +78,12 @@ for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
         text = event.text.lower()
 
-        if text == 'привет' or 'хай':
-            if event.from_user:
-                request = requests.get("https://vk.com/id" + str(event.user_id))
-                bs = BeautifulSoup(request.text, "html.parser")
-                user_name = _clean_all_tag_from_str(bs.findAll("title")[0])
-                your_name = user_name.split()[0]
-                vk.messages.send(user_id=event.user_id, message=f'Привет-привет, {your_name}!', random_id=0)
-            elif event.from_chat:
-                vk.messages.send(chat_id=event.chat_id, message='Привет-Привет, ребята!', random_id=0)
+        request = requests.get("https://vk.com/id" + str(event.user_id))
+        bs = BeautifulSoup(request.text, "html.parser")
+        user_name = _clean_all_tag_from_str(bs.findAll("title")[0])
+        your_name = user_name.split()[0]
 
-        elif text[:16] == 'погода в городе ':
+        if text[:16] == 'погода в городе ':
             if event.from_user:
                 vk.messages.send(user_id=event.user_id, message=weather(text[16:]), random_id=0)
             elif event.from_chat:
@@ -100,11 +95,20 @@ for event in longpoll.listen():
             elif event.from_chat:
                 vk.messages.send(user_id=event.chat_id, message=get_fanfiction(text[11:].lower()), random_id=0)
 
-        elif text == "пока" or "бай":
+        elif text == "пока" or text == "бай":
             if event.from_user:
-                vk.messages.send(user_id=event.user_id, message="Пока-пока!", random_id=0)
+                vk.messages.send(user_id=event.user_id, message=f"Пока-пока, {your_name}!", random_id=0)
             elif event.from_chat:
                 vk.messages.send(user_id=event.chat_id, message="Пока-пока, ребята!", random_id=0)
 
+        elif text == 'привет' or text == 'хай':
+            if event.from_user:
+                vk.messages.send(user_id=event.user_id, message=f'Привет-привет, {your_name}!', random_id=0)
+            elif event.from_chat:
+                vk.messages.send(chat_id=event.chat_id, message='Привет-Привет, ребята!', random_id=0)
+
         else:
-            pass
+            if event.from_user:
+                vk.messages.send(user_id=event.user_id, message='Я Вас не понимаю((...', random_id=0)
+            elif event.from_chat:
+                vk.messages.send(chat_id=event.chat_id, message='Я вас не понимаю((...', random_id=0)
