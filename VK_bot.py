@@ -36,7 +36,6 @@ def weather(place):
 def get_fanfiction(fandom):
     url = "https://ficbook.net/fanfiction/%20/" + fandom.replace(" ", "_")
     fanfictions = []
-    names = []
     http = httplib2.Http()
     status, response = http.request(url)
     for link in BeautifulSoup(response, 'html.parser', parse_only=SoupStrainer('a')):
@@ -44,19 +43,16 @@ def get_fanfiction(fandom):
             if "/readfic/" in link['href'] and not "premium" in link['href']:
                 fanfictions.append("http://ficbook.net" + link['href'])
     fanfictions = fanfictions[:3]
-
+    r = []
     for f in fanfictions:
-        r = requests.get(f)
-        soup = BeautifulSoup(r.text, 'lxml')
-        name = soup.find_all('h1')
-        names.append([elem.string for elem in name])
-    it = 0
-    result = []
-    for i in names:
-        for j in i:
-            result.append(fanfictions[it] + " --> " + j + "\n")
-            it += 1
+        url = f
+        status, response = http.request(url)
+        for link in BeautifulSoup(response, 'html.parser', parse_only=SoupStrainer('h1')):
+            soup = BeautifulSoup(str(link), 'html.parser')
+            r.append(f + ' --> ' + soup.h1.text + '\n')
+    result = " ".join(r)
     return result
+
 
 
 def _clean_all_tag_from_str(string_line):
